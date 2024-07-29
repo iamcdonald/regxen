@@ -1,0 +1,11 @@
+commit-msg:
+  commands:
+    lint:
+      run: pnpx commitlint --config ./config/.commitlintrc.yaml --edit --color
+
+pre-commit:
+  commands:
+    check:
+      glob: "*.{ts,json}"
+      run: pnpm lint --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
