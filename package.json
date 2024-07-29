@@ -1,18 +1,48 @@
 {
   "name": "regxen",
+  "private": true,
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "prepare": "lefthook install"
+    "prepare": "lefthook install",
+    "vitest": "vitest -c ./config/vitest/vitest.config.ts",
+    "test:unit": "pnpm vitest --project unit run",
+    "test:unit:watch": "pnpm vitest --project unit watch",
+    "test:integration": "pnpm vitest --project integration run",
+    "test:integration:watch": "pnpm vitest --project integration watch",
+    "test:all": "pnpm vitest --project all run --coverage --coverage.include 'src/**/*.ts'",
+    "build": "tsc -p ./config/tsconfig/build.json --outDir dist --declaration",
+    "build:test": "pnpm test:integration ./test/RegXen.generate.test.ts",
+    "type-check": "tsc -p ./config/tsconfig/types.json --noEmit",
+    "lint": "biome check --config-path=./config/biome.json"
   },
-  "keywords": [],
+  "files": [
+    "./dist"
+  ],
+  "keywords": [
+    "regex",
+    "regexp",
+    "regular",
+    "expression",
+    "parser",
+    "generator"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "lefthook": "^1.7.11"
+    "@types/node": "^20.14.12",
+    "@vitest/coverage-v8": "^2.0.4",
+    "lefthook": "^1.7.11",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.4"
+  },
+  "dependencies": {
+    "@eslint-community/regexpp": "^4.11.0"
   }
 }
