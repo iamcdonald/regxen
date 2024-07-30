@@ -1,0 +1,83 @@
+name: Release
+run-name: Release
+on:
+  push:
+    tags:
+      - '[0-9]+\.[0-9]+\.[0-9]+'
+
+env:
+  BUILD_CACHE_KEY: ${{ github.run_id }}-BUILD
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 22
+          pnpm-version: 9.5
+      - name: Transpile (Build)
+        run: pnpm build
+      - name: Save built artifact in cache
+        id: cache-build
+        uses: actions/cache/save@v4
+        with:
+          path: dist
+          key: ${{ env.BUILD_CACHE_KEY }}
+  test:
+    name: Test built artifact
+    strategy: { matrix: { node: [20, 22] } }
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.node }}
+          pnpm-version: 9.5
+      - name: Restore built artifact in cache
+        id: cache-build
+        uses: actions/cache/restore@v4
+        with:
+          path: dist
+          key: ${{ env.BUILD_CACHE_KEY }}
+      - name: Run test
+        run: pnpm build:test
+  release:
+    name: Release package
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Get next semantic version based on commits
+        id: next_version
+        uses: thenativeweb/get-next-version@main
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 22
+          pnpm-version: 9.5
+      - name: Restore built artifact in cache
+        id: cache-build
+        uses: actions/cache/restore@v4
+        with:
+          path: dist
+          key: ${{ env.BUILD_CACHE_KEY }}
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: "${{secrets.NPM_TOKEN}}"
+          VERSION: ${{ github.ref_name }}
+        run: |
+          echo "${{ steps.next_version.outputs.version }}"
+          jq --arg version "${{ env.VERSION }}" '.version=$version' package.json > p.json && mv p.json package.json
+          pnpm publish --dry-run --no-git-checks
