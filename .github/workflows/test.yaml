@@ -1,0 +1,53 @@
+name: Test
+run-name: Test
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 22
+          pnpm-version: 9.5
+      - name: Running linter
+        run: pnpm lint
+  type_check:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 22
+          pnpm-version: 9.5
+      - name: Running types:check
+        run: pnpm types:check
+  test:
+    name: Test
+    strategy: { matrix: { node: [20, 22] } }
+    needs: [lint, type_check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.node }}
+          pnpm-version: 9.5
+      - name: Run test:all
+        run: pnpm test:all

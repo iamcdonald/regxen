@@ -1,0 +1,26 @@
+name: Setup
+description: Intialize base context.
+
+inputs:
+  node-version:
+    description: "Version of Node.js to use."
+    required: true
+  pnpm-version:
+    description: "Version of pnpm to use."
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: "pnpm"
+    - name: Install
+      shell: bash
+      run: pnpm install

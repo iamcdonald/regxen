@@ -14,8 +14,8 @@
     "test:integration:watch": "pnpm vitest --project integration watch",
     "test:all": "pnpm vitest --project all run --coverage --coverage.include 'src/**/*.ts'",
     "build": "tsc -p ./config/tsconfig/build.json --outDir dist --declaration",
-    "build:test": "pnpm test:integration ./test/RegXen.generate.test.ts",
-    "type-check": "tsc -p ./config/tsconfig/types.json --noEmit",
+    "build:test": "BUILT=true pnpm test:integration ./test/RegXen.generate.test.ts",
+    "types:check": "tsc -p ./config/tsconfig/types.json --noEmit",
     "lint": "biome check --config-path=./config/biome.json"
   },
   "files": [
