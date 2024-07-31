@@ -2,51 +2,51 @@ import type { TestCase } from "./types";
 
 const cases: TestCase[] = [
   {
-    regex: /[ABGI]/,
+    regex: { source: "[ABGI]" },
     description: "list",
   },
   {
-    regex: /[\u{1F3FB}\u{1F3FC}\u{1F3FD}]/v,
+    regex: { source: "[\\u{1F3FB}\\u{1F3FC}\\u{1F3FD}]", flags: ["v"] },
     description: "list - unicode",
   },
   {
-    regex: /[a-b]/,
+    regex: { source: "[a-b]" },
     description: "range",
-    checkOutput: /a|b/,
+    checkOutput: { source: "a|b" },
   },
   {
-    regex: /[\d]/,
+    regex: { source: "[\\d]" },
     description: "meta",
   },
   {
-    regex: /[^ABG]/,
+    regex: { source: "[^ABG]" },
     description: "list - negated",
     options: {
       unicode: {
-        filter: /[ABGF]/,
+        filter: { source: "[ABGF]" },
       },
     },
-    checkOutput: /F/,
+    checkOutput: { source: "F" },
   },
   {
-    regex: /[^a-y]/,
+    regex: { source: "[^a-y]" },
     description: "range - negated",
     options: {
       unicode: {
-        filter: /[a-z]/,
+        filter: { source: "[a-z]" },
       },
     },
-    checkOutput: /z/,
+    checkOutput: { source: "z" },
   },
   {
-    regex: /[^\d]/,
+    regex: { source: "[^\\d]" },
     description: "meta - negated",
     options: {
       unicode: {
-        filter: /[0-9A]/,
+        filter: { source: "[0-9A]" },
       },
     },
-    checkOutput: /A/,
+    checkOutput: { source: "A" },
   },
 ];
 
