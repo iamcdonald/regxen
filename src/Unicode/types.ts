@@ -1,3 +1,6 @@
+import type { Flag } from "../flags";
+
 export type UnicodeOptions = {
-	filter: RegExp;
+  filter?: RegExp;
+  flags?: Flag[];
 };

@@ -1,6 +1,7 @@
 import Config, { type Settings } from "./Config";
 import RandomNumber from "./RandomNumber";
 import Unicode from "./Unicode";
+import flags from "./flags";
 import { PatternGenerator } from "./generators";
 import type { Print } from "./generators/BaseGenerators";
 import transform from "./transform";
@@ -20,7 +21,11 @@ class RegXen {
   constructor(regexSrc: string | RegExp, options?: Partial<Settings>) {
     this.regex = asRegExp(regexSrc);
     this.pattern = new PatternGenerator();
-    this.config = new Config(new RandomNumber(), options || RegXen.options);
+    this.config = new Config({
+      rng: new RandomNumber(),
+      flags: flags.get(this.regex),
+      settings: options || RegXen.options,
+    });
     this.pattern.setConfig(this.config);
     transform(this.regex, this.pattern);
   }
