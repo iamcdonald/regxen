@@ -30,7 +30,7 @@ jobs:
           key: ${{ env.BUILD_CACHE_KEY }}
   test:
     name: Test built artifact
-    strategy: { matrix: { node: [20, 22] } }
+    strategy: { matrix: { node: [16, 18, 20, 22] } }
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -48,7 +48,9 @@ jobs:
           path: dist
           key: ${{ env.BUILD_CACHE_KEY }}
       - name: Run test
-        run: pnpm build:test
+        env:
+          BUILT: true
+        run: pnpm test:smoke run
   release:
     name: Release package
     needs: [build, test]

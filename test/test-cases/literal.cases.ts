@@ -2,11 +2,11 @@ import type { TestCase } from "./types";
 
 const cases: TestCase[] = [
   {
-    regex: /a/,
+    regex: { source: "a" },
     description: "letter",
   },
   {
-    regex: /\u{1F3FB}/u,
+    regex: { source: "\\u{1F3FB}", flags: ["v"] },
     description: "unicode",
   },
 ];
