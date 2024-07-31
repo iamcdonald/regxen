@@ -10,7 +10,7 @@ class Unicode {
     this.flags = options.flags || [];
     this.codePointSet = new CodePointSet({
       reduced: !flags.hasUnicode(this.flags),
-    }).createSubSet(/[\p{Assigned}--\p{Co}]/v);
+    }).createSubSet(new RegExp(".", this.flags.join("")));
     if (options.filter) {
       this.codePointSet = this.codePointSet.createSubSet(options.filter);
     }

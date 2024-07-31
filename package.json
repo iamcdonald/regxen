@@ -8,13 +8,11 @@
   "scripts": {
     "prepare": "lefthook install",
     "vitest": "vitest -c ./config/vitest/vitest.config.ts",
-    "test:unit": "pnpm vitest --project unit run",
-    "test:unit:watch": "pnpm vitest --project unit watch",
-    "test:integration": "pnpm vitest --project integration run",
-    "test:integration:watch": "pnpm vitest --project integration watch",
+    "test:unit": "pnpm vitest --project unit",
+    "test:integration": "pnpm vitest --project integration",
+    "test:smoke": "pnpm test:integration test/RegXen.generate.test.ts",
     "test:all": "pnpm vitest --project all run --coverage --coverage.include 'src/**/*.ts'",
     "build": "tsc -p ./config/tsconfig/build.json --outDir dist --declaration",
-    "build:test": "BUILT=true pnpm test:integration ./test/RegXen.generate.test.ts",
     "types:check": "tsc -p ./config/tsconfig/types.json --noEmit",
     "lint": "biome check --config-path=./config/biome.json"
   },

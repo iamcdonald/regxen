@@ -1,8 +1,17 @@
-import type { Settings } from "../../src/Config";
+import type { Flag } from "../../src/flags";
+
+export type RegExpParts = {
+  source: string;
+  flags?: Flag[];
+};
 
 export type TestCase = {
-  regex: RegExp;
+  regex: RegExpParts;
   description: string;
-  options?: Partial<Settings>;
-  checkOutput?: RegExp;
+  options?: {
+    unicode: {
+      filter: RegExpParts;
+    };
+  };
+  checkOutput?: RegExpParts;
 };

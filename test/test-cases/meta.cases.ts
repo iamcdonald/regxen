@@ -2,90 +2,90 @@ import type { TestCase } from "./types";
 
 const cases: TestCase[] = [
   {
-    regex: /\d/,
+    regex: { source: "\\d" },
     description: "digit",
   },
   {
-    regex: /\w/,
+    regex: { source: "\\w" },
     description: "word",
   },
   {
-    regex: /\s/,
+    regex: { source: "\\s" },
     description: "white-space",
   },
   {
-    regex: /./,
+    regex: { source: "." },
     description: "any",
   },
   {
-    regex: /\p{ASCII}/u,
+    regex: { source: "p{ASCII}", flags: ["v"] },
     description: "property - lone",
     options: {
       unicode: {
-        filter: /[A\u{1F3FB}]/v,
+        filter: { source: "[A\\u{1F3FB}]", flags: ["v"] },
       },
     },
-    checkOutput: /A/,
+    checkOutput: { source: "A" },
   },
   {
-    regex: /\p{Script=Hiragana}/v,
+    regex: { source: "p{Script=Hiragana}", flags: ["v"] },
     description: "property - with key & value",
     options: {
       unicode: {
-        filter: /[A-Zを]/v,
+        filter: { source: "[A-Zを]", flags: ["v"] },
       },
     },
-    checkOutput: /を/,
+    checkOutput: { source: "を" },
   },
   {
-    regex: /\D/,
+    regex: { source: "\\D" },
     description: "digit - negate",
     options: {
       unicode: {
-        filter: /[\dA]/,
+        filter: { source: "[\\dA]" },
       },
     },
-    checkOutput: /A/,
+    checkOutput: { source: "A" },
   },
   {
-    regex: /\W/,
+    regex: { source: "\\W" },
     description: "word - negate",
     options: {
       unicode: {
-        filter: /[\w{]/,
+        filter: { source: "[\\w{]" },
       },
     },
-    checkOutput: /{/,
+    checkOutput: { source: "{" },
   },
   {
-    regex: /\S/,
+    regex: { source: "\\S" },
     description: "white-space - negate",
     options: {
       unicode: {
-        filter: /[\s\{]/v,
+        filter: { source: "[\\s{]" },
       },
     },
-    checkOutput: /{/,
+    checkOutput: { source: "{" },
   },
   {
-    regex: /\P{ASCII}/v,
+    regex: { source: "P{ASCII}", flags: ["v"] },
     description: "property (lone) - negate",
     options: {
       unicode: {
-        filter: /[\p{ASCII}\u{1F3FB}]/v,
+        filter: { source: "[p{ASCII}\\u{1F3FB}]", flags: ["v"] },
       },
     },
-    checkOutput: /\u{1F3FB}/v,
+    checkOutput: { source: "\\u{1F3FB}", flags: ["v"] },
   },
   {
-    regex: /\P{Script=Hiragana}/v,
+    regex: { source: "P{Script=Hiragana}", flags: ["v"] },
     description: "property (with key & value) - negate",
     options: {
       unicode: {
-        filter: /[\p{Script=Hiragana}A]/v,
+        filter: { source: "[p{Script=Hiragana}A]", flags: ["v"] },
       },
     },
-    checkOutput: /A/,
+    checkOutput: { source: "A" },
   },
 ];
 
