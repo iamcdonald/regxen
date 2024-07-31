@@ -2,13 +2,23 @@ import { expect, test } from "vitest";
 import Unicode from "../../Unicode";
 import options from "./options";
 
-const uc = new Unicode();
+const uc = new Unicode({ flags: [] });
 
 test("any - returns all code points except line terminators", () => {
+  const uc = new Unicode({ flags: ["v"] });
   const codePoints = options.get({ kind: "any" }, uc);
   const chars = codePoints.map((cp) => String.fromCodePoint(cp)).join("");
   expect(chars.match(/(?!.)\p{Any}+/v)).toEqual(null);
   expect(chars.match(/./g)?.length).toEqual(chars.length);
+});
+
+test("any - honours passed flags", () => {
+  let uc = new Unicode({ flags: ["v"] });
+  const charsWithUnicodeFlag = options.get({ kind: "any" }, uc);
+  expect(charsWithUnicodeFlag.length).toEqual(151922);
+  uc = new Unicode({ flags: [] });
+  const charsWithoutUnicodeFlag = options.get({ kind: "any" }, uc);
+  expect(charsWithoutUnicodeFlag.length).toEqual(57683);
 });
 
 test("space - returns all space code points", () => {

@@ -1,4 +1,4 @@
-import addFlagsToRegExp from "./add-flags-to-regexp";
+import flags from "../flags";
 
 const UNICODE_RANGE_MAX = 1114111;
 const CODE_POINT_STRING_SEPERATOR = " ";
@@ -10,7 +10,7 @@ const allCodePointSet = Array.from({
   length: UNICODE_RANGE_MAX,
 }).map((_, idx) => idx);
 
-const setRegExpGlobal = (regex: RegExp) => addFlagsToRegExp(regex, ["g"]);
+const setRegExpGlobal = (regex: RegExp) => flags.add(regex, ["g"]);
 
 export let cache: Record<string, number[]> = {};
 
@@ -22,11 +22,14 @@ class CodePointSet<T extends string> {
   private stripSeperatorFromResults: boolean;
   private key: string;
   constructor(opts?: {
+    reduced?: boolean;
     codePoints?: number[];
     key?: T extends ReservedBaseCacheName ? never : T;
   }) {
-    this.key = opts?.key || "all";
-    this.codePoints = opts?.codePoints || allCodePointSet;
+    this.key = opts?.key || `all${opts?.reduced ? "-reduced" : ""}`;
+    this.codePoints =
+      opts?.codePoints ||
+      (opts?.reduced ? allCodePointSet.slice(0, 65536) : allCodePointSet);
     this.codePointsStr = this.codePoints
       .map((cp) => String.fromCodePoint(cp))
       .join(CODE_POINT_STRING_SEPERATOR);
@@ -64,6 +67,7 @@ class CodePointSet<T extends string> {
       return [char.codePointAt(0) as number];
     });
     cache[cacheKey] = codePoints;
+
     return codePoints;
   }
 

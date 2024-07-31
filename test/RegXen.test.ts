@@ -20,19 +20,21 @@ vi.mock("../src/RandomNumber", async (importOriginal) => {
     await importOriginal<typeof import("../src/RandomNumber")>();
   class RandomNumberMock extends RandomNumber implements RandomNumberMock {
     private static values: number[] = [0];
-    private index = 0;
+    private static index = 0;
     static useOriginal = false;
     static setValues(values: number[]) {
+      RandomNumberMock.useOriginal = false;
+      RandomNumberMock.index = 0;
       RandomNumberMock.values = values;
     }
     get(weight?: number) {
       if (RandomNumberMock.useOriginal) {
         return super.get(weight);
       }
-      if (++this.index >= RandomNumberMock.values.length) {
-        this.index = 0;
+      if (++RandomNumberMock.index >= RandomNumberMock.values.length) {
+        RandomNumberMock.index = 0;
       }
-      return RandomNumberMock.values[this.index];
+      return RandomNumberMock.values[RandomNumberMock.index];
     }
   }
   return {
@@ -59,7 +61,9 @@ test("options: unicode.filter - bound available range of unicode code points to 
     unicode: { filter: /[A-Z]/ },
   });
   expect(rgxn.generate()).toEqual("FPZFPZFPZF");
-  rgxn = new RegXen(/.*/, {
+
+  RandomNumberMock.setValues([0.99999999, 0.2, 0.6]);
+  rgxn = new RegXen(/.*/v, {
     quantifier: { max: 10 },
     unicode: { filter: /[\u{1F600}-\u{1F606}]/v },
   });
@@ -68,7 +72,7 @@ test("options: unicode.filter - bound available range of unicode code points to 
 
 test("setSeed - reset's random number seed for repeatable sequences", () => {
   RandomNumberMock.useOriginal = true;
-  const rgxn = new RegXen(/.*/, {
+  const rgxn = new RegXen(/.*/v, {
     quantifier: { max: 10 },
     unicode: { filter: /\p{Emoji}/v },
   });
@@ -84,7 +88,7 @@ test("setSeed - reset's random number seed for repeatable sequences", () => {
 
 test("generate (greedy vs lazy) - takes into account quantifier greediness", () => {
   RandomNumberMock.useOriginal = true;
-  let rgxn = new RegXen(/.+/, {
+  let rgxn = new RegXen(/.+/v, {
     quantifier: { max: 10 },
     unicode: { filter: /\p{Emoji}/v },
   });
@@ -95,7 +99,7 @@ test("generate (greedy vs lazy) - takes into account quantifier greediness", () 
   expect(rgxn.generate()).toEqual("😣😫🆚🙃🎎⛸🪇🎛📝");
   expect(rgxn.generate()).toEqual("💈📄🔯🎞🐂🚲🗓");
 
-  rgxn = new RegXen(/.+?/, {
+  rgxn = new RegXen(/.+?/v, {
     quantifier: { max: 10 },
     unicode: { filter: /\p{Emoji}/v },
   });
@@ -137,7 +141,7 @@ PatternGenerator -> 1 time
 test("RegXen.clearUnicodeCache - clear's the cache", () => {
   RandomNumberMock.useOriginal = true;
   RegXen.clearUnicodeCache();
-  const rgxn = new RegXen(/.*/, {
+  const rgxn = new RegXen(/.*/v, {
     quantifier: { max: 10 },
     unicode: { filter: /\p{Emoji}/v },
   });
