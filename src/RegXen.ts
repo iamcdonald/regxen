@@ -6,20 +6,13 @@ import { PatternGenerator } from "./generators";
 import type { Print } from "./generators/BaseGenerators";
 import transform from "./transform";
 
-const asRegExp = (value: string | RegExp) => {
-  if (typeof value === "string") {
-    return new RegExp(value);
-  }
-  return value;
-};
-
 class RegXen {
   private regex: RegExp;
   private pattern: PatternGenerator;
   private config: Config;
   private static options: Partial<Settings>;
-  constructor(regexSrc: string | RegExp, options?: Partial<Settings>) {
-    this.regex = asRegExp(regexSrc);
+  constructor(regex: RegExp, options?: Partial<Settings>) {
+    this.regex = regex;
     this.pattern = new PatternGenerator();
     this.config = new Config({
       rng: new RandomNumber(),

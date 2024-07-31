@@ -1,8 +1,8 @@
 import type { Settings } from "../../src/Config";
 
 export type TestCase = {
-	regex: string | RegExp;
-	description: string;
-	options?: Settings;
-	checkOutput?: RegExp;
+  regex: RegExp;
+  description: string;
+  options?: Partial<Settings>;
+  checkOutput?: RegExp;
 };
