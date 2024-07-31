@@ -1,26 +1,53 @@
-export default [
+import type { TestCase } from "./types";
+
+const cases: TestCase[] = [
   {
-    regex: /[\u{1F3FB}\u{1F3FC}\u{1F3FD}]/u,
+    regex: /[ABGI]/,
     description: "list",
   },
   {
-    regex: /[3-z]/,
-    description: "range",
+    regex: /[\u{1F3FB}\u{1F3FC}\u{1F3FD}]/v,
+    description: "list - unicode",
   },
   {
-    regex: /[\p{Script=Hiragana}]/u,
+    regex: /[a-b]/,
+    description: "range",
+    checkOutput: /a|b/,
+  },
+  {
+    regex: /[\d]/,
     description: "meta",
   },
   {
-    regex: /[^\u{1F3FB}\u{1F3FC}\u{1F3FD}]/v,
+    regex: /[^ABG]/,
     description: "list - negated",
+    options: {
+      unicode: {
+        filter: /[ABGF]/,
+      },
+    },
+    checkOutput: /F/,
   },
   {
-    regex: /[^0-z]/,
+    regex: /[^a-y]/,
     description: "range - negated",
+    options: {
+      unicode: {
+        filter: /[a-z]/,
+      },
+    },
+    checkOutput: /z/,
   },
   {
-    regex: /[^\p{Script=Hiragana}\p{ASCII}]/u,
+    regex: /[^\d]/,
     description: "meta - negated",
+    options: {
+      unicode: {
+        filter: /[0-9A]/,
+      },
+    },
+    checkOutput: /A/,
   },
 ];
+
+export default cases;
