@@ -30,10 +30,10 @@ test("options: filter (include) - choose which sets to include in available opti
 
 test("options: flags - set flags that should be included on every select", () => {
   let u = new Unicode({ flags: [] });
-  expect(u.getCodePointsForRegex(/./).length).toEqual(57683);
+  expect(u.getCodePointsForRegex(/./).length).toEqual(57344);
 
   u = new Unicode({ flags: ["s"] });
-  expect(u.getCodePointsForRegex(/./).length).toEqual(57687);
+  expect(u.getCodePointsForRegex(/./).length).toEqual(57348);
 
   u = new Unicode({ flags: ["v"] });
   expect(u.getCodePointsForRegex(/./).length).toEqual(151922);

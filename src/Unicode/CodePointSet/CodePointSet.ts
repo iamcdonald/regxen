@@ -1,4 +1,5 @@
-import flags from "../flags";
+import flags from "../../flags";
+import reducedCodePointSetIncludeList from "./reduced-code-point-set-include-list.json";
 
 const UNICODE_RANGE_MAX = 1114111;
 const CODE_POINT_STRING_SEPERATOR = " ";
@@ -9,6 +10,11 @@ const CODE_POINT_STRING_SEPERATOR_CP = CODE_POINT_STRING_SEPERATOR.codePointAt(
 const allCodePointSet = Array.from({
   length: UNICODE_RANGE_MAX,
 }).map((_, idx) => idx);
+
+const reducedCodePointSet = reducedCodePointSetIncludeList.reduce(
+  (cps, { start, end }) => cps.concat(allCodePointSet.slice(start, end)),
+  [] as number[],
+);
 
 const setRegExpGlobal = (regex: RegExp) => flags.add(regex, ["g"]);
 
@@ -29,7 +35,7 @@ class CodePointSet<T extends string> {
     this.key = opts?.key || `all${opts?.reduced ? "-reduced" : ""}`;
     this.codePoints =
       opts?.codePoints ||
-      (opts?.reduced ? allCodePointSet.slice(0, 65536) : allCodePointSet);
+      (opts?.reduced ? reducedCodePointSet : allCodePointSet);
     this.codePointsStr = this.codePoints
       .map((cp) => String.fromCodePoint(cp))
       .join(CODE_POINT_STRING_SEPERATOR);

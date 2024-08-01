@@ -14,7 +14,8 @@
     "test:all": "pnpm vitest --project all run --coverage --coverage.include 'src/**/*.ts'",
     "build": "tsc -p ./config/tsconfig/build.json --outDir dist --declaration",
     "types:check": "tsc -p ./config/tsconfig/types.json --noEmit",
-    "lint": "biome check --config-path=./config/biome.json"
+    "lint": "biome check --config-path=./config/biome.json",
+    "generate:include-list": "pnpm tsx ./config/scripts/generate-reduced-code-set-include-list.ts"
   },
   "files": [
     "./dist"
