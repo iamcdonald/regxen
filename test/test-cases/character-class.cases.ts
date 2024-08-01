@@ -15,6 +15,17 @@ const cases: TestCase[] = [
     checkOutput: { source: "a|b" },
   },
   {
+    regex: { source: "[a-g]" },
+    description:
+      "range - should only chose from valid code points within range",
+    options: {
+      unicode: {
+        filter: { source: "[^b-f]" },
+      },
+    },
+    checkOutput: { source: "[ag]" },
+  },
+  {
     regex: { source: "[\\d]" },
     description: "meta",
   },
