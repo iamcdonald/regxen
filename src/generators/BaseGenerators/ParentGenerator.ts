@@ -6,7 +6,7 @@ import type { Print } from "./types";
 type WithInterface<T, I> = I extends void ? T : T & I;
 
 abstract class ParentGenerator<
-  T extends ChildGenerator | RangeGenerator,
+  T extends ChildGenerator,
   I = void,
 > extends ChildGenerator {
   protected abstract validChildren: {
@@ -32,7 +32,7 @@ abstract class ParentGenerator<
     };
   }
 
-  addChild(child: ChildGenerator | RangeGenerator) {
+  addChild(child: ChildGenerator) {
     if (this.validChildren.some((VC) => child instanceof VC)) {
       if (child instanceof ChildGenerator) {
         child.setConfig(this.config);
