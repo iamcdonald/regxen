@@ -13,12 +13,21 @@ test("any - returns all code points except line terminators", () => {
 });
 
 test("any - honours passed flags", () => {
-  let uc = new Unicode({ flags: ["v"] });
-  const charsWithUnicodeFlag = options.get({ kind: "any" }, uc);
-  expect(charsWithUnicodeFlag.length).toEqual(151922);
+  let uc = new Unicode({ flags: ["v", "s"] });
+  let chars = options.get({ kind: "any" }, uc);
+  expect(chars.length).toEqual(151926);
+
+  uc = new Unicode({ flags: ["v"] });
+  chars = options.get({ kind: "any" }, uc);
+  expect(chars.length).toEqual(151922);
+
+  uc = new Unicode({ flags: ["s"] });
+  chars = options.get({ kind: "any" }, uc);
+  expect(chars.length).toEqual(57348);
+
   uc = new Unicode({ flags: [] });
-  const charsWithoutUnicodeFlag = options.get({ kind: "any" }, uc);
-  expect(charsWithoutUnicodeFlag.length).toEqual(57683);
+  chars = options.get({ kind: "any" }, uc);
+  expect(chars.length).toEqual(57344);
 });
 
 test("space - returns all space code points", () => {

@@ -8,9 +8,15 @@ class Unicode {
   private flags: Flag[];
   constructor(options: UnicodeOptions) {
     this.flags = options.flags || [];
+    const reduced = !flags.hasUnicode(this.flags);
     this.codePointSet = new CodePointSet({
-      reduced: !flags.hasUnicode(this.flags),
-    }).createSubSet(new RegExp(".", this.flags.join("")));
+      reduced,
+    });
+    if (!reduced) {
+      this.codePointSet = this.codePointSet.createSubSet(
+        /[\p{Assigned}--\p{Co}]/v,
+      );
+    }
     if (options.filter) {
       this.codePointSet = this.codePointSet.createSubSet(options.filter);
     }
