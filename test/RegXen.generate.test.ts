@@ -68,6 +68,9 @@ for (const key of Object.keys(testcases)) {
       };
       checkOutputi = checkOutput && buildRegExp(checkOutput);
     } catch (e) {
+      if (e instanceof SyntaxError) {
+        throw e;
+      }
       skip = true;
     }
     test(
