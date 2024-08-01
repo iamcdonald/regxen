@@ -18,7 +18,7 @@ const cases: TestCase[] = [
     description: "any",
   },
   {
-    regex: { source: "p{ASCII}", flags: ["v"] },
+    regex: { source: "\\p{ASCII}", flags: ["v"] },
     description: "property - lone",
     options: {
       unicode: {
@@ -28,7 +28,7 @@ const cases: TestCase[] = [
     checkOutput: { source: "A" },
   },
   {
-    regex: { source: "p{Script=Hiragana}", flags: ["v"] },
+    regex: { source: "\\p{Script=Hiragana}", flags: ["v"] },
     description: "property - with key & value",
     options: {
       unicode: {
@@ -68,21 +68,21 @@ const cases: TestCase[] = [
     checkOutput: { source: "{" },
   },
   {
-    regex: { source: "P{ASCII}", flags: ["v"] },
+    regex: { source: "\\P{ASCII}", flags: ["v"] },
     description: "property (lone) - negate",
     options: {
       unicode: {
-        filter: { source: "[p{ASCII}\\u{1F3FB}]", flags: ["v"] },
+        filter: { source: "[\\p{ASCII}\\u{1F3FB}]", flags: ["v"] },
       },
     },
     checkOutput: { source: "\\u{1F3FB}", flags: ["v"] },
   },
   {
-    regex: { source: "P{Script=Hiragana}", flags: ["v"] },
+    regex: { source: "\\P{Script=Hiragana}", flags: ["v"] },
     description: "property (with key & value) - negate",
     options: {
       unicode: {
-        filter: { source: "[p{Script=Hiragana}A]", flags: ["v"] },
+        filter: { source: "[\\p{Script=Hiragana}A]", flags: ["v"] },
       },
     },
     checkOutput: { source: "A" },
