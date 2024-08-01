@@ -1,5 +1,5 @@
 name: Test
-run-name: Test
+run-name: "PR: ${{ github.head_ref }} -> ${{ github.base_ref }}"
 on:
   pull_request:
     branches:
