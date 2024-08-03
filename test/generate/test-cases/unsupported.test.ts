@@ -1,4 +1,5 @@
-import type { TestCase } from "./types";
+import TestCaseRunner from "../TestCaseRunner";
+import type { TestCase } from "../types";
 
 const cases: TestCase[] = [
   {
@@ -49,4 +50,4 @@ const cases: TestCase[] = [
   },
 ];
 
-export default cases;
+new TestCaseRunner({ name: "unsupported", cases }).run();

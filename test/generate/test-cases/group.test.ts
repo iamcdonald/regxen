@@ -1,4 +1,7 @@
-export default [
+import TestCaseRunner from "../TestCaseRunner";
+import type { TestCase } from "../types";
+
+const cases: TestCase[] = [
   {
     regex: { source: "(HI[A-Z]*)?" },
     description: "simple",
@@ -12,3 +15,5 @@ export default [
     description: "reference - named",
   },
 ];
+
+new TestCaseRunner({ name: "group", cases }).run();

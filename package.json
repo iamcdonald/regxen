@@ -10,7 +10,7 @@
     "vitest": "vitest -c ./config/vitest/vitest.config.ts",
     "test:unit": "pnpm vitest --project unit",
     "test:integration": "pnpm vitest --project integration",
-    "test:smoke": "pnpm test:integration test/RegXen.generate.test.ts",
+    "test:smoke": "pnpm test:integration test/generate/**",
     "test:all": "pnpm vitest --project all run --coverage --coverage.include 'src/**/*.ts'",
     "build": "tsc -p ./config/tsconfig/build.json --outDir dist --declaration",
     "types:check": "tsc -p ./config/tsconfig/types.json --noEmit",
